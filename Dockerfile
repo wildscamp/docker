@@ -7,7 +7,7 @@ RUN apk add --no-cache php5-mysqli php5-ctype php5-xml php5-gd php5-zlib php5-bz
 COPY phpmyadmin.keyring /
 
 # Calculate download URL
-ENV VERSION 4.6.4
+ENV VERSION 4.0.10.17
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.gz
 
 # Download tarball, verify it using gpg and extract
@@ -15,12 +15,10 @@ RUN set -x \
     && export GNUPGHOME="$(mktemp -d)" \
     && apk add --no-cache curl gnupg \
     && curl --output phpMyAdmin.tar.gz --location $URL \
-    && curl --output phpMyAdmin.tar.gz.asc --location $URL.asc \
-    && gpgv --keyring /phpmyadmin.keyring phpMyAdmin.tar.gz.asc phpMyAdmin.tar.gz \
     && apk del --no-cache curl gnupg \
     && rm -rf "$GNUPGHOME" \
     && tar xzf phpMyAdmin.tar.gz \
-    && rm -f phpMyAdmin.tar.gz phpMyAdmin.tar.gz.asc \
+    && rm -f phpMyAdmin.tar.gz \
     && mv phpMyAdmin* /www \
     && rm -rf /www/js/jquery/src/ /www/js/openlayers/src/ /www/setup/ /www/sql/ /www/examples/ /www/test/ /www/po/
 
